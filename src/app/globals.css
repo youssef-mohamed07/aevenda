@@ -1,0 +1,633 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Aevenda Design Tokens
+   Single source of truth for color, type, radius, elevation,
+   and motion. Evolved from the CyberStage landing page so the
+   premium visual language scales across the whole site.
+   ============================================================ */
+@theme inline {
+  /* ---- Base surfaces ---- */
+  --color-background: #ffffff;
+  --color-foreground: #09090b;
+
+  /* Dark cinematic surfaces (hero, dark sections, footer) */
+  --color-surface: #08090c;
+  --color-surface-raised: #0e1320;
+  --color-surface-deep: #02040a;
+
+  /* ---- Brand accent scale ---- */
+  --color-accent: #2a76a6;
+  --color-accent-soft: #1d5a82;
+  --color-accent-deep: #04285f;
+  --color-accent-bright: #5ba3d4;
+
+  /* ---- Typography ---- */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-arabic: var(--font-arabic);
+
+  /* ---- Radius scale (semantic) ---- */
+  --radius-pill: 9999px;
+  --radius-card: 1.5rem; /* rounded-card == 24px, the house card radius */
+  --radius-panel: 2rem; /* rounded-panel == 32px, large surfaces */
+
+  /* ---- Elevation + brand glows ---- */
+  --shadow-glow-sm: 0 0 24px rgba(80, 160, 230, 0.35);
+  --shadow-glow:
+    0 0 50px -12px rgba(80, 160, 230, 0.85), 0 0 24px -16px rgba(42, 118, 166, 0.6);
+  --shadow-glow-lg:
+    0 0 60px -8px rgba(80, 160, 230, 1), 0 8px 30px -10px rgba(20, 70, 130, 0.4);
+  --shadow-glass:
+    0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-glass-dark:
+    0 0 0 1px rgba(80, 160, 230, 0.04) inset,
+    0 8px 30px -10px rgba(20, 70, 130, 0.4),
+    0 0 40px -20px rgba(80, 160, 230, 0.5);
+
+  /* ---- Motion ---- */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   Base element styles
+   ============================================================ */
+html,
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family:
+    var(--font-sans), var(--font-arabic), Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* ============================================================
+   Internationalization helpers (English-first, Arabic-ready)
+   Logical properties (start/end, ms-/me-) make the system RTL
+   safe; these hooks activate once an Arabic locale is added.
+   ============================================================ */
+html.lang-ar body,
+html.lang-ar button,
+html.lang-ar input,
+html.lang-ar select,
+html.lang-ar textarea {
+  font-family:
+    var(--font-arabic), var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Marketing chrome (hero) can stay LTR to preserve composition */
+.locale-shell-ltr {
+  direction: ltr;
+}
+
+html[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* iOS detached-letter fix: disable tracking for Arabic text */
+html[dir="rtl"] [class*="tracking-"] {
+  letter-spacing: normal !important;
+}
+
+html[dir="rtl"] main {
+  text-align: start;
+}
+
+html[dir="rtl"] .marquee {
+  animation-name: marquee-rtl;
+}
+
+html[dir="rtl"] .marquee-reverse {
+  animation-name: marquee-reverse-rtl;
+}
+
+html[dir="rtl"] .marquee-mask {
+  mask-image: linear-gradient(
+    to left,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+.display-headline {
+  font-family:
+    var(--font-display), var(--font-sans), var(--font-arabic), Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+html.lang-ar .display-headline,
+.lang-ar .display-headline {
+  font-family: var(--font-arabic), var(--font-display), sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+/* ============================================================
+   Brand gradients
+   ============================================================ */
+.bg-accent-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-accent-soft) 45%,
+    var(--color-accent-deep) 100%
+  );
+}
+
+/* Static gradient text — fixed angle so AR/EN match (never mirrored) */
+.text-gradient-accent {
+  display: inline;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-accent-bright) 50%,
+    var(--color-accent) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Glow for solid-color text only — never combine with .text-gradient-accent
+   (the text-fill-color clip breaks in WebKit). */
+.text-glow-accent {
+  text-shadow:
+    0 0 24px rgba(80, 160, 230, 0.35),
+    0 0 60px rgba(42, 118, 166, 0.25);
+}
+
+/* Glow via filter on a wrapper, gradient on the inner span */
+.accent-glow-wrap {
+  display: inline-block;
+  filter: drop-shadow(0 0 24px rgba(80, 160, 230, 0.35))
+    drop-shadow(0 0 60px rgba(42, 118, 166, 0.25));
+}
+
+html.lang-ar .accent-glow-wrap {
+  filter: drop-shadow(0 0 18px rgba(80, 160, 230, 0.22))
+    drop-shadow(0 0 42px rgba(42, 118, 166, 0.14));
+}
+
+/* ============================================================
+   Dark cinematic backdrops
+   ============================================================ */
+.surface-dark {
+  /* Deep navy-to-black cinematic gradient */
+  background: radial-gradient(
+    120% 80% at 50% 0%,
+    #0a1530 0%,
+    var(--color-surface-deep) 45%,
+    #02040a 100%
+  );
+  color: #f4f4f5;
+}
+
+/** Shared glass surface — matches the floating header pill. */
+.glass-shell {
+  background: linear-gradient(
+    135deg,
+    rgba(12, 16, 28, 0.78) 0%,
+    rgba(8, 12, 22, 0.7) 100%
+  );
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+}
+
+/* Soft animated aurora wash for dark hero/section tops */
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      38% 32% at 18% 22%,
+      rgba(60, 140, 210, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      32% 28% at 82% 18%,
+      rgba(20, 70, 140, 0.16),
+      transparent 70%
+    ),
+    radial-gradient(
+      55% 45% at 50% 95%,
+      rgba(42, 118, 166, 0.22),
+      transparent 75%
+    ),
+    linear-gradient(180deg, rgba(8, 20, 45, 0.4) 0%, transparent 40%);
+}
+
+/* Subtle horizontal guide lines for cinematic depth */
+.cinematic-guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(120, 170, 220, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 100% 140px;
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 55%,
+    #000 30%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 55%,
+    #000 30%,
+    transparent 85%
+  );
+  opacity: 0.55;
+}
+
+/* Static grid floor (light sections) */
+.grid-floor {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+/* One continuous light band — no double padding between sections */
+.site-light-band .site-light-section + .site-light-section {
+  padding-top: 0;
+}
+
+/* ============================================================
+   Glassmorphism surfaces
+   ============================================================ */
+.glass {
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-glass);
+}
+
+/* Premium glass pill — for badges and CTAs on dark surfaces */
+.glass-pill {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-glass-dark);
+}
+
+/* ============================================================
+   Interactive surfaces
+   ============================================================ */
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    border-color 250ms ease,
+    transform 250ms ease;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at 50% 0%,
+    rgba(42, 118, 166, 0.12),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+.spotlight-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* LED video-wall texture (used by LED / activation visuals) */
+.led-panel {
+  position: relative;
+  background-image: radial-gradient(
+    circle,
+    rgba(42, 118, 166, 0.55) 1.2px,
+    transparent 1.6px
+  );
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
+
+.led-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60% 60% at 50% 50%,
+    rgba(42, 118, 166, 0.35),
+    transparent 70%
+  );
+  animation: led-breathe 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes led-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Live-status pulsing dot */
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgba(42, 118, 166, 0.8);
+}
+
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 2px solid rgba(42, 118, 166, 0.7);
+  animation: pulse-ring 1.6s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Marquee
+   ============================================================ */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+  will-change: transform;
+}
+
+.marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-reverse 35s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee-rtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+@keyframes marquee-reverse-rtl {
+  from {
+    transform: translateX(50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes featured-product-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, transparent),
+      0 16px 40px -28px rgba(42, 118, 166, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-accent) 55%, transparent),
+      0 22px 50px -24px rgba(42, 118, 166, 0.55);
+  }
+}
+
+.featured-product-card {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  animation: featured-product-glow 3.2s ease-in-out infinite;
+}
+
+.featured-product-media-glow {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-accent) 35%, transparent),
+    transparent 55%,
+    color-mix(in srgb, var(--color-accent) 12%, transparent)
+  );
+  opacity: 0.7;
+  animation: led-breathe 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-product-card {
+    animation: none;
+  }
+
+  .featured-product-media-glow {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Motion: entrance + scroll reveal
+   Decoupled from the splash screen so blocks animate on load
+   and on scroll without any orchestration dependency.
+   ============================================================ */
+@keyframes page-enter-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes page-enter-drop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Staggered entrance on first paint */
+.enter-item {
+  opacity: 0;
+  animation: page-enter-rise 0.62s var(--ease-brand) forwards;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+.enter-item-from-top {
+  animation-name: page-enter-drop;
+}
+
+/* Hero title — opacity only so crossfade rotator is not repainted with translate */
+@keyframes page-enter-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.enter-item-fade {
+  opacity: 0;
+  animation: page-enter-fade 0.75s var(--ease-brand) forwards;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+/* Scroll reveals share the same motion curve, gated by JS via .is-inview */
+.reveal-scroll {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+}
+
+.reveal-scroll.is-inview {
+  animation: page-enter-rise 0.62s var(--ease-brand) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+/* FAQ accordion — snappier staggered slide-up per item */
+.reveal-scroll-faq {
+  transform: translate3d(0, 2.25rem, 0);
+}
+
+.reveal-scroll-faq.is-inview {
+  animation: faq-stagger-rise 0.58s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes faq-stagger-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2.25rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .marquee-reverse,
+  .led-panel::after,
+  .pulse-dot::after {
+    animation: none !important;
+  }
+
+  .enter-item,
+  .enter-item-fade,
+  .reveal-scroll,
+  .reveal-scroll-faq {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
