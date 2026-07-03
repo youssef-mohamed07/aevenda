@@ -102,7 +102,7 @@ export function SiteSplash({ locale }: { locale: Locale }) {
       <button
         type="button"
         onClick={dismiss}
-        className="absolute end-4 top-4 z-10 rounded-full border border-white/25 bg-noir/35 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm transition hover:border-white/45 hover:bg-noir/50 sm:end-6 sm:top-6"
+        className="display absolute end-4 top-4 z-10 rounded-full border border-white/30 bg-noir/45 px-5 py-2.5 text-sm font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-noir/60 sm:end-6 sm:top-6 sm:px-6 sm:py-3 sm:text-base"
       >
         {labels.splashSkip}
       </button>

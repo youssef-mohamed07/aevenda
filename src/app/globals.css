@@ -124,15 +124,15 @@ html[dir="rtl"] main {
 
 .display {
   font-family: var(--font-display), Georgia, "Times New Roman", serif;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
 html.lang-ar .display,
 .lang-ar .display {
   font-family: var(--font-arabic), var(--font-sans), sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0;
   line-height: 1.2;
 }
