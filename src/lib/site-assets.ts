@@ -1,8 +1,8 @@
 import { getSiteConfig } from "@/lib/site-config";
 import { placeholderUrl } from "@/lib/placeholders";
 
-const LOGO_FALLBACK = "";
-const FAVICON_FALLBACK = "/favicon.ico";
+const LOGO_FALLBACK = "/brand/logo.svg";
+const FAVICON_FALLBACK = "/favicon.png";
 const OG_FALLBACK = placeholderUrl(1200, 630);
 
 export function getSiteLogo(): string {

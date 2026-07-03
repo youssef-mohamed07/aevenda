@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "CyberStage_Landing_Page", "scripts"]
+  "exclude": ["node_modules", "scripts"]
 }

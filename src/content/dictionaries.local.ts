@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { getLegacyContent, legacySite } from "@/content/legacy-site";
 
 export interface NavItem {
   label: string;
@@ -25,6 +26,7 @@ export interface Dictionary {
     getInTouch: string;
     rights: string;
     social: {
+      facebook: string;
       instagram: string;
       linkedin: string;
       x: string;
@@ -37,61 +39,48 @@ export interface Dictionary {
   };
 }
 
-const emptyDictionary = {
-  site: { home: "" },
-  nav: {
-    cta: "",
-    items: [],
-  },
-  footer: {
-    description: "",
-    explore: "",
-    contact: "",
-    getInTouch: "",
-    rights: "",
-    social: {
-      instagram: "",
-      linkedin: "",
-      x: "",
+function buildDictionary(locale: Locale): Dictionary {
+  const legacy = getLegacyContent(locale);
+  const { company } = legacySite;
+
+  return {
+    site: {
+      home: locale === "ar" ? "العودة للرئيسية" : "Back to home",
     },
-  },
-  home: {
-    brand: "Aevenda",
-    comingSoon: "Coming Soon",
-    contact: {
-      emailSubject: "",
-      messageIntro: "",
+    nav: {
+      cta: locale === "ar" ? "تواصل معنا" : "Contact us",
+      items: legacy.nav.map(({ label, href }) => ({ label, href })),
     },
-  },
-} satisfies Dictionary;
+    footer: {
+      description: legacy.about.intro,
+      explore: legacy.footer.pagesTitle,
+      contact: legacy.footer.contactTitle,
+      getInTouch: locale === "ar" ? "تواصل معنا" : "Get in touch",
+      rights: legacy.footer.rights,
+      social: {
+        facebook: "Facebook",
+        instagram: "Instagram",
+        linkedin: "LinkedIn",
+        x: "X",
+      },
+    },
+    home: {
+      brand: company.name,
+      comingSoon: "Coming Soon",
+      contact: {
+        emailSubject: locale === "ar" ? "استفسار — Aevenda" : "Inquiry — Aevenda",
+        messageIntro:
+          locale === "ar"
+            ? "مرحباً Aevenda،\n\nأود مناقشة مشروع.\n\n"
+            : "Hi Aevenda,\n\nI'd like to discuss a project.\n\n",
+      },
+    },
+  };
+}
 
 const dictionaries: Record<Locale, Dictionary> = {
-  en: {
-    ...emptyDictionary,
-    site: { home: "Back to home" },
-    home: {
-      brand: "Aevenda",
-      comingSoon: "Coming Soon",
-      contact: emptyDictionary.home.contact,
-    },
-    footer: {
-      ...emptyDictionary.footer,
-      rights: "All rights reserved.",
-    },
-  },
-  ar: {
-    ...emptyDictionary,
-    site: { home: "العودة للرئيسية" },
-    home: {
-      brand: "Aevenda",
-      comingSoon: "Coming Soon",
-      contact: emptyDictionary.home.contact,
-    },
-    footer: {
-      ...emptyDictionary.footer,
-      rights: "جميع الحقوق محفوظة.",
-    },
-  },
+  en: buildDictionary("en"),
+  ar: buildDictionary("ar"),
 };
 
 export function getDictionaryLocal(locale: Locale): Dictionary {

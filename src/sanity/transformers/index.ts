@@ -37,6 +37,7 @@ export function toSiteConfig(
   if (!data?.companyName) return null;
 
   const instagram = data.socialLinks?.find((link) => link.platform === "instagram")?.url;
+  const facebook = data.socialLinks?.find((link) => link.platform === "facebook")?.url;
   const linkedin = data.socialLinks?.find((link) => link.platform === "linkedin")?.url;
   const x = data.socialLinks?.find((link) => link.platform === "x")?.url;
 
@@ -57,6 +58,7 @@ export function toSiteConfig(
       countryName: data.addressCountryName ?? "Saudi Arabia",
     },
     social: {
+      facebook: facebook ?? "",
       instagram: instagram ?? "",
       linkedin: linkedin ?? "",
       x: x ?? "",

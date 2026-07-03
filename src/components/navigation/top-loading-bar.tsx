@@ -113,7 +113,7 @@ export function TopLoadingBar() {
     >
       <div
         className={[
-          "h-full origin-left bg-accent shadow-[0_0_18px_rgba(80,160,230,0.9)]",
+          "h-full origin-left bg-accent",
           visible ? "opacity-100" : "opacity-0",
         ].join(" ")}
         style={{

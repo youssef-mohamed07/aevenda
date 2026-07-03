@@ -1,65 +1,59 @@
 @import "tailwindcss";
 
-/* ============================================================
-   Aevenda Design Tokens
-   Single source of truth for color, type, radius, elevation,
-   and motion. Evolved from the CyberStage landing page so the
-   premium visual language scales across the whole site.
-   ============================================================ */
 @theme inline {
-  /* ---- Base surfaces ---- */
-  --color-background: #ffffff;
-  --color-foreground: #09090b;
+  --color-canvas: #f5f1ea;
+  --color-paper: #ffffff;
+  --color-noir: #0a0a0a;
+  --color-ink: #0a0a0a;
+  --color-ink-muted: #6b6b6b;
+  --color-ink-light: #999999;
+  --color-border: #e8e4de;
+  --color-border-strong: #d4d0c8;
 
-  /* Dark cinematic surfaces (hero, dark sections, footer) */
-  --color-surface: #08090c;
-  --color-surface-raised: #0e1320;
-  --color-surface-deep: #02040a;
+  --color-accent: #ef363b;
+  --color-accent-hover: #d42e33;
+  --color-accent-soft: rgba(239, 54, 59, 0.08);
 
-  /* ---- Brand accent scale ---- */
-  --color-accent: #2a76a6;
-  --color-accent-soft: #1d5a82;
-  --color-accent-deep: #04285f;
-  --color-accent-bright: #5ba3d4;
-
-  /* ---- Typography ---- */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-display);
   --font-arabic: var(--font-arabic);
 
-  /* ---- Radius scale (semantic) ---- */
-  --radius-pill: 9999px;
-  --radius-card: 1.5rem; /* rounded-card == 24px, the house card radius */
-  --radius-panel: 2rem; /* rounded-panel == 32px, large surfaces */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0, 1);
 
-  /* ---- Elevation + brand glows ---- */
-  --shadow-glow-sm: 0 0 24px rgba(80, 160, 230, 0.35);
-  --shadow-glow:
-    0 0 50px -12px rgba(80, 160, 230, 0.85), 0 0 24px -16px rgba(42, 118, 166, 0.6);
-  --shadow-glow-lg:
-    0 0 60px -8px rgba(80, 160, 230, 1), 0 8px 30px -10px rgba(20, 70, 130, 0.4);
-  --shadow-glass:
-    0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --shadow-glass-dark:
-    0 0 0 1px rgba(80, 160, 230, 0.04) inset,
-    0 8px 30px -10px rgba(20, 70, 130, 0.4),
-    0 0 40px -20px rgba(80, 160, 230, 0.5);
+  --glass-blur: 24px;
+  --glass-saturate: 180%;
+  --glass-bg: rgba(255, 255, 255, 0.42);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-highlight: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
 
-  /* ---- Motion ---- */
-  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Header footprint: container top padding + bar height */
+  --site-header-height: calc(0.75rem + 3.25rem);
+  --site-header-offset: calc(var(--site-header-height) + 1.25rem);
+  --site-hero-pad-top: calc(var(--site-header-height) + 1.75rem);
 }
 
-/* ============================================================
-   Base element styles
-   ============================================================ */
+@media (min-width: 768px) {
+  :root {
+    --site-header-height: calc(1.25rem + 4.25rem);
+    --site-header-offset: calc(var(--site-header-height) + 1.75rem);
+    --site-hero-pad-top: calc(var(--site-header-height) + 3.25rem);
+  }
+}
+
+html {
+  scroll-padding-top: var(--site-header-offset);
+}
+
 html,
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family:
-    var(--font-sans), var(--font-arabic), Arial, Helvetica, sans-serif;
+  color: var(--color-ink);
+  font-family: var(--font-sans), var(--font-arabic), system-ui, sans-serif;
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
 }
 
 html {
@@ -67,42 +61,55 @@ html {
 }
 
 section[id] {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: var(--site-header-offset);
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: #fff;
+  background: color-mix(in srgb, var(--color-accent) 18%, white);
+  color: var(--color-ink);
 }
 
-/* ============================================================
-   Internationalization helpers (English-first, Arabic-ready)
-   Logical properties (start/end, ms-/me-) make the system RTL
-   safe; these hooks activate once an Arabic locale is added.
-   ============================================================ */
 html.lang-ar body,
 html.lang-ar button,
 html.lang-ar input,
 html.lang-ar select,
-html.lang-ar textarea {
-  font-family:
-    var(--font-arabic), var(--font-sans), Arial, Helvetica, sans-serif;
+html.lang-ar textarea,
+.lang-ar {
+  font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
 }
 
-html[dir="rtl"] {
-  direction: rtl;
+.lang-ar {
+  line-height: 1.65;
 }
 
-/* Marketing chrome (hero) can stay LTR to preserve composition */
-.locale-shell-ltr {
-  direction: ltr;
+.lang-ar .text-xs {
+  font-size: 0.8125rem;
+}
+
+.lang-ar .text-sm {
+  font-size: 0.9375rem;
+}
+
+.lang-ar .text-base {
+  font-size: 1.0625rem;
+}
+
+.lang-ar .text-lg {
+  font-size: 1.1875rem;
+}
+
+.lang-ar :where([class*="11px"]) {
+  font-size: 0.8125rem;
+}
+
+.lang-ar :where([class*="10px"]) {
+  font-size: 0.75rem;
 }
 
 html[dir="rtl"] .rtl-flip {
   transform: scaleX(-1);
 }
 
-/* iOS detached-letter fix: disable tracking for Arabic text */
 html[dir="rtl"] [class*="tracking-"] {
   letter-spacing: normal !important;
 }
@@ -111,523 +118,375 @@ html[dir="rtl"] main {
   text-align: start;
 }
 
-html[dir="rtl"] .marquee {
-  animation-name: marquee-rtl;
-}
-
-html[dir="rtl"] .marquee-reverse {
-  animation-name: marquee-reverse-rtl;
-}
-
-html[dir="rtl"] .marquee-mask {
-  mask-image: linear-gradient(
-    to left,
-    transparent,
-    #000 10%,
-    #000 90%,
-    transparent
-  );
-}
-
-/* ============================================================
-   Typography helpers
-   ============================================================ */
-.display-headline {
-  font-family:
-    var(--font-display), var(--font-sans), var(--font-arabic), Arial, sans-serif;
+.display {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
   font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 0.95;
-  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
-html.lang-ar .display-headline,
-.lang-ar .display-headline {
-  font-family: var(--font-arabic), var(--font-display), sans-serif;
-  text-transform: none;
+html.lang-ar .display,
+.lang-ar .display {
+  font-family: var(--font-arabic), var(--font-sans), sans-serif;
+  font-weight: 500;
   letter-spacing: 0;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
-/* ============================================================
-   Brand gradients
-   ============================================================ */
-.bg-accent-gradient {
-  background: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    var(--color-accent-soft) 45%,
-    var(--color-accent-deep) 100%
-  );
-}
-
-/* Static gradient text — fixed angle so AR/EN match (never mirrored) */
-.text-gradient-accent {
-  display: inline;
-  background-image: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    var(--color-accent-bright) 50%,
-    var(--color-accent) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-/* Glow for solid-color text only — never combine with .text-gradient-accent
-   (the text-fill-color clip breaks in WebKit). */
-.text-glow-accent {
-  text-shadow:
-    0 0 24px rgba(80, 160, 230, 0.35),
-    0 0 60px rgba(42, 118, 166, 0.25);
-}
-
-/* Glow via filter on a wrapper, gradient on the inner span */
-.accent-glow-wrap {
-  display: inline-block;
-  filter: drop-shadow(0 0 24px rgba(80, 160, 230, 0.35))
-    drop-shadow(0 0 60px rgba(42, 118, 166, 0.25));
-}
-
-html.lang-ar .accent-glow-wrap {
-  filter: drop-shadow(0 0 18px rgba(80, 160, 230, 0.22))
-    drop-shadow(0 0 42px rgba(42, 118, 166, 0.14));
-}
-
-/* ============================================================
-   Dark cinematic backdrops
-   ============================================================ */
-.surface-dark {
-  /* Deep navy-to-black cinematic gradient */
-  background: radial-gradient(
-    120% 80% at 50% 0%,
-    #0a1530 0%,
-    var(--color-surface-deep) 45%,
-    #02040a 100%
-  );
-  color: #f4f4f5;
-}
-
-/** Shared glass surface — matches the floating header pill. */
-.glass-shell {
-  background: linear-gradient(
-    135deg,
-    rgba(12, 16, 28, 0.78) 0%,
-    rgba(8, 12, 22, 0.7) 100%
-  );
-  backdrop-filter: blur(24px) saturate(1.8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-}
-
-/* Soft animated aurora wash for dark hero/section tops */
-.aurora {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
+/* Ambient canvas — glass panels need depth behind them */
+.site-shell {
+  min-height: 100vh;
   background:
-    radial-gradient(
-      38% 32% at 18% 22%,
-      rgba(60, 140, 210, 0.18),
-      transparent 70%
-    ),
-    radial-gradient(
-      32% 28% at 82% 18%,
-      rgba(20, 70, 140, 0.16),
-      transparent 70%
-    ),
-    radial-gradient(
-      55% 45% at 50% 95%,
-      rgba(42, 118, 166, 0.22),
-      transparent 75%
-    ),
-    linear-gradient(180deg, rgba(8, 20, 45, 0.4) 0%, transparent 40%);
+    radial-gradient(ellipse 90% 60% at 10% -5%, rgba(239, 54, 59, 0.07), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 95% 10%, rgba(255, 255, 255, 0.9), transparent 45%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(239, 54, 59, 0.04), transparent 50%),
+    var(--color-canvas);
 }
 
-/* Subtle horizontal guide lines for cinematic depth */
-.cinematic-guides {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(120, 170, 220, 0.06) 1px,
-    transparent 1px
-  );
-  background-size: 100% 140px;
-  mask-image: radial-gradient(
-    ellipse 70% 60% at 50% 55%,
-    #000 30%,
-    transparent 85%
-  );
-  -webkit-mask-image: radial-gradient(
-    ellipse 70% 60% at 50% 55%,
-    #000 30%,
-    transparent 85%
-  );
-  opacity: 0.55;
+.site-main {
+  background: transparent;
 }
 
-/* Static grid floor (light sections) */
-.grid-floor {
-  background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+/* Cinematic page hero — fills the band so space below header feels intentional */
+.page-hero-bg {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% -25%, rgba(239, 54, 59, 0.11), transparent 55%),
+    radial-gradient(ellipse 85% 70% at 0% 45%, rgba(255, 255, 255, 0.82), transparent 50%),
+    radial-gradient(ellipse 65% 55% at 100% 55%, rgba(239, 54, 59, 0.06), transparent 45%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.035) 0%, transparent 38%);
 }
 
-/* One continuous light band — no double padding between sections */
-.site-light-band .site-light-section + .site-light-section {
-  padding-top: 0;
-}
-
-/* ============================================================
-   Glassmorphism surfaces
-   ============================================================ */
-.glass {
-  background: rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px) saturate(1.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: var(--shadow-glass);
-}
-
-/* Premium glass pill — for badges and CTAs on dark surfaces */
-.glass-pill {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow-glass-dark);
-}
-
-/* ============================================================
-   Interactive surfaces
-   ============================================================ */
-.spotlight-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  transition:
-    border-color 250ms ease,
-    transform 250ms ease;
-}
-
-.spotlight-card::before {
+.page-hero-bg::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    600px circle at 50% 0%,
-    rgba(42, 118, 166, 0.12),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 250ms ease;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3rem;
+  background: linear-gradient(to bottom, transparent, var(--color-canvas));
   pointer-events: none;
-  z-index: 0;
 }
 
-.spotlight-card:hover::before {
+/* About values — scroll highlight rows */
+.value-row {
+  opacity: 0.42;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.55s var(--ease-out-expo),
+    transform 0.55s var(--ease-out-expo);
+}
+
+.value-row--revealed {
+  transform: translateY(0);
+}
+
+.value-row--active {
   opacity: 1;
 }
 
-.spotlight-card > * {
-  position: relative;
-  z-index: 1;
+@media (prefers-reduced-motion: reduce) {
+  .value-row {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
-/* LED video-wall texture (used by LED / activation visuals) */
-.led-panel {
-  position: relative;
-  background-image: radial-gradient(
-    circle,
-    rgba(42, 118, 166, 0.55) 1.2px,
-    transparent 1.6px
-  );
-  background-size: 14px 14px;
-  background-position: 0 0;
+/* Homepage — cinematic split with edge-to-edge imagery */
+.home-hero {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(239, 54, 59, 0.09), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(239, 54, 59, 0.04), transparent 50%),
+    var(--color-canvas);
 }
 
-.led-panel::after {
+/* —— Glassmorphism system —— */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(20px) saturate(185%);
+  -webkit-backdrop-filter: blur(20px) saturate(185%);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel-solid {
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 9999px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.glass-pill-scrolled {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(28px) saturate(195%);
+  -webkit-backdrop-filter: blur(28px) saturate(195%);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 9999px;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Unified site header — one soft bar, always pill-shaped */
+.site-header-bar {
+  height: 3.25rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(20px) saturate(175%);
+  -webkit-backdrop-filter: blur(20px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.045);
+  transition:
+    background 0.55s var(--ease-out-expo),
+    border-color 0.55s var(--ease-out-expo),
+    box-shadow 0.55s var(--ease-out-expo),
+    backdrop-filter 0.55s var(--ease-out-expo),
+    height 0.45s var(--ease-out-expo);
+}
+
+@media (min-width: 768px) {
+  .site-header-bar {
+    height: 4.25rem;
+  }
+}
+
+.site-header-bar.is-scrolled {
+  height: 3rem;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(28px) saturate(195%);
+  -webkit-backdrop-filter: blur(28px) saturate(195%);
+  border-color: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+@media (min-width: 768px) {
+  .site-header-bar.is-scrolled {
+    height: 3.75rem;
+  }
+}
+
+.site-header-link {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  transition: color 0.25s ease;
+}
+
+.lang-ar .site-header-link {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.site-header-link:hover {
+  color: color-mix(in srgb, var(--color-ink) 82%, transparent);
+}
+
+.site-header-link.is-active {
+  color: var(--color-ink);
+}
+
+.site-header-link.is-active::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    60% 60% at 50% 50%,
-    rgba(42, 118, 166, 0.35),
-    transparent 70%
-  );
-  animation: led-breathe 3.6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes led-breathe {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* Live-status pulsing dot */
-.pulse-dot {
-  position: relative;
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
+  inset-inline: 1rem;
+  bottom: 0.3rem;
+  height: 2px;
+  border-radius: 1px;
   background: var(--color-accent);
-  box-shadow: 0 0 10px rgba(42, 118, 166, 0.8);
+  opacity: 0.9;
 }
 
-.pulse-dot::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 999px;
-  border: 2px solid rgba(42, 118, 166, 0.7);
-  animation: pulse-ring 1.6s ease-out infinite;
-  will-change: transform, opacity;
+.glass-chip {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.6);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.6);
+.glass-chip-hover {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-chip-hover:hover {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-overlay {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+}
+
+.mobile-nav-backdrop {
+  background: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.mobile-nav-overlay {
+  background-color: #f5f1ea;
+  isolation: isolate;
+  height: 100dvh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.accent-dash {
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 1px;
+}
+
+@keyframes fade-up {
+  from {
     opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
 }
 
-/* ============================================================
-   Marquee
-   ============================================================ */
-.marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-  will-change: transform;
+.reveal-scroll {
+  opacity: 0;
 }
 
-.marquee-reverse {
-  display: flex;
-  width: max-content;
-  animation: marquee-reverse 35s linear infinite;
-  will-change: transform;
+.reveal-scroll.is-inview {
+  animation: fade-up 1s var(--ease-out-expo) forwards;
+  animation-delay: var(--reveal-delay, 0s);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .marquee-track,
+  .marquee-track-slow,
+  .marquee-track-fast {
+    animation: none !important;
+  }
+
+  .agent-fab {
+    animation: none !important;
+  }
+}
+
+/* —— Marquee —— */
 
 @keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
   to {
     transform: translateX(-50%);
   }
 }
 
-@keyframes marquee-reverse {
-  from {
-    transform: translateX(-50%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.marquee-track {
+  animation: marquee 38s linear infinite;
 }
 
-@keyframes marquee-rtl {
-  to {
-    transform: translateX(50%);
-  }
+.marquee-track-slow {
+  animation: marquee 52s linear infinite;
 }
 
-@keyframes marquee-reverse-rtl {
-  from {
-    transform: translateX(50%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.marquee-track-fast {
+  animation: marquee 26s linear infinite;
+}
+
+.marquee-track-reverse {
+  animation-direction: reverse;
 }
 
 .marquee-mask {
   mask-image: linear-gradient(
     to right,
     transparent,
-    #000 10%,
-    #000 90%,
+    black 8%,
+    black 92%,
     transparent
   );
 }
 
-/* ============================================================
-   Utilities
-   ============================================================ */
+/* Marquee scrolls LTR even on Arabic pages — see marquee.tsx dir="ltr" */
+
+/* —— Floating agent —— */
+
+@keyframes agent-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 12px 40px rgba(239, 54, 59, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+  50% {
+    box-shadow:
+      0 16px 48px rgba(239, 54, 59, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+}
+
+.agent-fab {
+  animation: agent-pulse 3s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .glass-panel-solid,
+  .glass-pill-scrolled {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
 .scrollbar-hide {
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-}
-
-@keyframes featured-product-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, transparent),
-      0 16px 40px -28px rgba(42, 118, 166, 0.35);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-accent) 55%, transparent),
-      0 22px 50px -24px rgba(42, 118, 166, 0.55);
-  }
-}
-
-.featured-product-card {
-  border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
-  animation: featured-product-glow 3.2s ease-in-out infinite;
-}
-
-.featured-product-media-glow {
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-accent) 35%, transparent),
-    transparent 55%,
-    color-mix(in srgb, var(--color-accent) 12%, transparent)
-  );
-  opacity: 0.7;
-  animation: led-breathe 3.6s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .featured-product-card {
-    animation: none;
-  }
-
-  .featured-product-media-glow {
-    animation: none;
-  }
-}
-
-/* ============================================================
-   Motion: entrance + scroll reveal
-   Decoupled from the splash screen so blocks animate on load
-   and on scroll without any orchestration dependency.
-   ============================================================ */
-@keyframes page-enter-rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 22px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes page-enter-drop {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Staggered entrance on first paint */
-.enter-item {
-  opacity: 0;
-  animation: page-enter-rise 0.62s var(--ease-brand) forwards;
-  animation-delay: var(--enter-delay, 0s);
-}
-
-.enter-item-from-top {
-  animation-name: page-enter-drop;
-}
-
-/* Hero title — opacity only so crossfade rotator is not repainted with translate */
-@keyframes page-enter-fade {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.enter-item-fade {
-  opacity: 0;
-  animation: page-enter-fade 0.75s var(--ease-brand) forwards;
-  animation-delay: var(--enter-delay, 0s);
-}
-
-/* Scroll reveals share the same motion curve, gated by JS via .is-inview */
-.reveal-scroll {
-  opacity: 0;
-  transform: translate3d(0, 24px, 0);
-}
-
-.reveal-scroll.is-inview {
-  animation: page-enter-rise 0.62s var(--ease-brand) forwards;
-  animation-delay: var(--reveal-delay, 0s);
-}
-
-/* FAQ accordion — snappier staggered slide-up per item */
-.reveal-scroll-faq {
-  transform: translate3d(0, 2.25rem, 0);
-}
-
-.reveal-scroll-faq.is-inview {
-  animation: faq-stagger-rise 0.58s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: var(--reveal-delay, 0s);
-}
-
-@keyframes faq-stagger-rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 2.25rem, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ============================================================
-   Reduced motion
-   ============================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .marquee,
-  .marquee-reverse,
-  .led-panel::after,
-  .pulse-dot::after {
-    animation: none !important;
-  }
-
-  .enter-item,
-  .enter-item-fade,
-  .reveal-scroll,
-  .reveal-scroll-faq {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
 }

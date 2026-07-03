@@ -4,61 +4,30 @@
 Read the relevant guide in `node_modules/next/dist/docs/` before writing routing or metadata code.
 <!-- END:nextjs-agent-rules -->
 
-## Status
+## Visual language — elegant / premium
 
-Structure-only scaffold — routing, layout shell, design system, i18n, and optional Sanity. No pages, sections, or copy yet.
+- **Display:** Cormorant Garamond (EN) · Cairo (AR) — class `.display`
+- **Body:** Geist Sans
+- **Noir** `#0A0A0A` · **Canvas** `#F5F1EA` · **Accent** `#EF363B` (logo red)
 
----
+Homepage: full-viewport cinematic hero → dark stats band → ivory/paper body sections → noir footer.
 
-## Visual language (light body sections)
-
-### Keep
-
-- `Section theme="light"` inside `SiteLightBand`
-- `SectionHeader {...homepageSectionHeader}` for centered eyebrow
-- Copy in `src/content/dictionaries.local.ts` — never inline in TSX
-- `Reveal` for motion; no scale/grow on hover
-
-### Do not introduce on light bands
-
-- Dark sections below hero (hero is the dark exception)
-- Glassmorphism on body cards
-- Hover scale on cards
-
----
+Header: fixed, transparent over hero (scroll → frosted paper bar).
 
 ## Section shell
 
 ```tsx
-<Section theme="light" id="my-section">
+<Section tone="light | paper | dark">
   <Container>
-    <SectionHeader
-      {...homepageSectionHeader}
-      eyebrow={eyebrow}
-      headline={title}
-      subtitle={subtitle}
-      className="mb-8 sm:mb-10"
-    />
-    {/* content */}
+    <SectionHeader {...homepageSectionHeader} eyebrow={…} headline={…} subtitle={…} />
   </Container>
 </Section>
 ```
 
----
+Copy lives in `src/content/` — not inline in TSX.
 
-## Content
+## Rules
 
-| Layer | Location |
-| --- | --- |
-| UI strings | `src/content/dictionaries.local.ts` |
-| Site config defaults | `src/lib/site-config.ts` |
-| CMS override | Sanity → Site Settings + UI Copy |
-
-Header nav, footer blocks, and CTAs render only when dictionary or site config has values.
-
----
-
-## Components
-
-- Server Components by default
-- `"use client"` only for interactivity (nav, Reveal, forms)
+- `Reveal` for scroll motion; no hover scale on cards
+- Buttons: rounded-full, uppercase tracking, `light` variant on dark surfaces
+- Glassmorphism: use `.glass`, `.glass-panel`, `.glass-panel-solid`, `.glass-pill`, `.glass-chip` from `globals.css`

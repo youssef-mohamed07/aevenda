@@ -1,3 +1,3 @@
-/** Content accessors — add getters here as you introduce CMS/local content modules. */
-
-export {};
+export type { LegacySiteArchive, LegacyLocaleContent } from "@/content/legacy/types";
+export { legacySite, getLegacyContent } from "@/content/legacy-site";
+export { legacyAssets, legacyRouteMap } from "@/content/legacy-assets";

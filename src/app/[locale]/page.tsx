@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getDictionary } from "@/content/dictionaries";
-import { isLocale } from "@/lib/i18n";
+import { HomeHero } from "@/components/sections/home-hero";
+import { HomeLogos } from "@/components/sections/home-logos";
+import { HomeStats } from "@/components/sections/home-stats";
+import { HomeTrust } from "@/components/sections/home-trust";
+import { HomeServices } from "@/components/sections/home-services";
+import { HomeCaseStudies } from "@/components/sections/home-case-studies";
+import { HomeTestimonials } from "@/components/sections/home-testimonials";
+import { CtaBand } from "@/components/sections/cta-band";
+import { getLegacyContent } from "@/content/legacy-site";
+import { isLocale, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/cms-seo";
 import { ensureSiteConfig } from "@/sanity/load-site-config";
 import { getSiteConfig } from "@/lib/site-config";
@@ -12,11 +20,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale: localeParam } = await params;
   if (!isLocale(localeParam)) return {};
   await ensureSiteConfig();
+  const config = getSiteConfig();
+  const { home } = getLegacyContent(localeParam);
+
   return buildPageMetadata({
     path: "/",
     locale: localeParam,
-    fallbackTitle: getSiteConfig().name,
-    fallbackDescription: "Coming Soon",
+    fallbackTitle: `${config.name} | ${home.hero.title}`,
+    fallbackDescription: home.hero.subtitle,
   });
 }
 
@@ -24,16 +35,18 @@ export default async function HomePage({ params }: PageProps) {
   const { locale: localeParam } = await params;
   if (!isLocale(localeParam)) notFound();
 
-  const dict = await getDictionary(localeParam);
+  const locale = localeParam as Locale;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <h1 className="display-headline text-5xl tracking-[0.08em] sm:text-7xl">
-        {dict.home.brand}
-      </h1>
-      <p className="mt-5 text-sm font-medium uppercase tracking-[0.35em] text-white/55 sm:text-base">
-        {dict.home.comingSoon}
-      </p>
+    <main className="site-main">
+      <HomeHero locale={locale} />
+      <HomeStats locale={locale} />
+      <HomeTrust locale={locale} />
+      <HomeLogos locale={locale} />
+      <HomeServices locale={locale} />
+      <HomeCaseStudies locale={locale} />
+      <HomeTestimonials locale={locale} />
+      <CtaBand locale={locale} />
     </main>
   );
 }

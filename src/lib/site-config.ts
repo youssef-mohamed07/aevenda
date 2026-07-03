@@ -17,6 +17,7 @@ export interface SiteConfigShape {
     countryName: string;
   };
   social: {
+    facebook: string;
     instagram: string;
     linkedin: string;
     x: string;
@@ -45,25 +46,29 @@ export function getSiteConfig(): SiteConfigShape {
 
   return {
     name: "Aevenda",
-    legalName: "Aevenda",
-    tagline: "",
-    description: "",
+    legalName: "Aevenda MBE",
+    tagline: "From Concept to Creation",
+    description:
+      "Media, branding, and events company — events, branding, media, AV, registration, and exhibition booths.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aevenda.com",
     locale: "en_SA",
-    email: "",
-    phone: "",
-    phoneDisplay: "",
-    whatsappMessage: "",
+    email: "inquiry@aevenda.com",
+    phone: "+966543937900",
+    phoneDisplay: "+966 54 393 7900",
+    whatsappMessage: "Hi Aevenda! I'd like to get in touch.",
     address: {
-      city: "",
+      city: "Riyadh",
       country: "SA",
-      countryName: "",
+      countryName: "Saudi Arabia",
     },
     social: {
+      facebook: "https://www.facebook.com/people/Aevenda/61581525729154/",
       instagram: "",
-      linkedin: "",
-      x: "",
+      linkedin: "https://www.linkedin.com/company/aevenda-mbe/posts/?feedView=all",
+      x: "https://x.com/aevendaofficial",
     },
+    logo: "/brand/logo.svg",
+    favicon: "/favicon.png",
   };
 }
 

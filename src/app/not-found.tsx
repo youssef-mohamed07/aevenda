@@ -68,7 +68,7 @@ export default async function NotFound() {
   return (
     <main className="flex min-h-[60vh] items-center py-24" lang={locale}>
       <Container>
-        <h1 className="display-headline text-4xl text-zinc-900 sm:text-5xl">{headline}</h1>
+        <h1 className="headline text-4xl md:text-5xl">{headline}</h1>
         {ctaLabel ? (
           <Link
             href={ctaHref}

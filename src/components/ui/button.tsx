@@ -3,30 +3,27 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { IconArrowRight } from "@/components/ui/icons";
 
-export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "light";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "group relative inline-flex items-center justify-center gap-2 rounded-pill font-semibold tracking-wide transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
+  "group inline-flex items-center justify-center gap-2.5 font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants: Record<ButtonVariant, string> = {
-  // Signature gradient pill (lifted from the CyberStage hero CTA)
   primary:
-    "overflow-hidden bg-accent-gradient text-white shadow-glow ring-1 ring-white/10 hover:shadow-glow-lg hover:ring-white/20",
-  // Glass pill — sits on dark surfaces
-  secondary:
-    "glass-pill text-white hover:border-white/20 hover:bg-white/[0.07]",
-  // Bordered pill — light-band sections
+    "rounded-full bg-accent text-white shadow-[0_2px_12px_rgba(239,54,59,0.3)] hover:bg-accent-hover hover:shadow-[0_4px_20px_rgba(239,54,59,0.4)]",
+  secondary: "rounded-full bg-ink text-white hover:bg-ink/85",
   outline:
-    "border border-zinc-200/90 bg-white text-zinc-900 shadow-sm shadow-zinc-900/[0.03] hover:border-accent/25 hover:bg-zinc-50/90",
-  // Minimal text button
-  ghost: "text-zinc-700 hover:text-accent",
+    "rounded-full border border-ink/15 text-ink hover:border-ink/30 hover:bg-ink/[0.03]",
+  ghost: "text-ink-muted hover:text-accent",
+  light:
+    "rounded-full bg-white text-noir uppercase tracking-[0.12em] hover:bg-white/92 shadow-[0_4px_24px_rgba(0,0,0,0.12)]",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "px-5 py-2.5 text-[13px]",
+  sm: "px-5 py-2.5 text-[0.8125rem]",
   md: "px-6 py-3 text-sm",
-  lg: "px-7 py-3.5 text-base",
+  lg: "px-8 py-3.5 text-[0.9375rem]",
 };
 
 export function buttonClasses(
@@ -37,27 +34,12 @@ export function buttonClasses(
   return cn(base, variants[variant], sizes[size], className);
 }
 
-/** Shared inner content: optional shimmer (primary) + label + optional arrow. */
-function Content({
-  variant,
-  withArrow,
-  children,
-}: {
-  variant: ButtonVariant;
-  withArrow?: boolean;
-  children: ReactNode;
-}) {
+function Content({ withArrow, children }: { withArrow?: boolean; children: ReactNode }) {
   return (
     <>
-      {variant === "primary" && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
-        />
-      )}
-      <span className="relative">{children}</span>
+      {children}
       {withArrow && (
-        <IconArrowRight className="rtl-flip relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        <IconArrowRight className="rtl-flip size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
       )}
     </>
   );
@@ -69,25 +51,20 @@ type ButtonProps = ComponentPropsWithoutRef<"button"> & {
   withArrow?: boolean;
 };
 
-/** `<button>` element styled with the design system. */
-export function Button({
-  variant = "primary",
-  size = "md",
-  withArrow,
-  className,
-  children,
-  type = "button",
-  ...props
-}: ButtonProps) {
+export function Button(props: ButtonProps) {
+  const {
+    variant = "primary",
+    size = "md",
+    withArrow,
+    className,
+    children,
+    type = "button",
+    ...rest
+  } = props;
+
   return (
-    <button
-      type={type}
-      className={buttonClasses(variant, size, className)}
-      {...props}
-    >
-      <Content variant={variant} withArrow={withArrow}>
-        {children}
-      </Content>
+    <button type={type} className={buttonClasses(variant, size, className)} {...rest}>
+      <Content withArrow={withArrow}>{children}</Content>
     </button>
   );
 }
@@ -99,11 +76,6 @@ type CtaLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
   withArrow?: boolean;
 };
 
-/**
- * Link styled as a button. Uses next/link for internal routes and a plain
- * anchor for external/hash links. Server-component friendly; analytics
- * tracking can be layered on by wrapping this in a thin client component.
- */
 export function CtaLink({
   href,
   variant = "primary",
@@ -119,18 +91,14 @@ export function CtaLink({
   if (isInternal) {
     return (
       <Link href={href} className={classes} {...props}>
-        <Content variant={variant} withArrow={withArrow}>
-          {children}
-        </Content>
+        <Content withArrow={withArrow}>{children}</Content>
       </Link>
     );
   }
 
   return (
     <a href={href} className={classes} {...props}>
-      <Content variant={variant} withArrow={withArrow}>
-        {children}
-      </Content>
+      <Content withArrow={withArrow}>{children}</Content>
     </a>
   );
 }
