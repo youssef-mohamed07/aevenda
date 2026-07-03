@@ -7,7 +7,7 @@ export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "lig
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "group inline-flex items-center justify-center gap-2.5 font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  "group inline-flex items-center justify-center gap-2.5 font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants: Record<ButtonVariant, string> = {
   primary:

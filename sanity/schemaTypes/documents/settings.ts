@@ -13,7 +13,6 @@ export const siteSettings = defineType({
       name: "logo",
       type: "image",
       title: "Logo",
-      options: { hotspot: true },
       fields: [defineField({ name: "alt", type: "string", title: "Alt text" })],
     }),
     defineField({
@@ -81,7 +80,6 @@ export const siteSettings = defineType({
       name: "ogImage",
       type: "image",
       title: "Default OG image",
-      options: { hotspot: true },
       fields: [defineField({ name: "alt", type: "string", title: "Alt text" })],
     }),
     defineField({

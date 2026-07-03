@@ -56,6 +56,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
               alt={caseStudies[0]?.title ?? "Aevenda portfolio"}
               fill
               priority
+              sizes="(max-width: 1024px) 100vw, 44vw"
               className="object-cover"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-canvas/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-canvas lg:via-canvas/30 lg:to-transparent" />

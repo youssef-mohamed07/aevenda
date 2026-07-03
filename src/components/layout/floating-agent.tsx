@@ -10,7 +10,7 @@ import {
   IconWhatsApp,
   IconX,
 } from "@/components/ui/icons";
-import { SiteImage } from "@/components/ui/site-image";
+import Image from "next/image";
 import { getUiLabels } from "@/lib/ui-labels";
 import { getSiteConfig, getWhatsAppUrl } from "@/lib/site-config";
 import type { Locale } from "@/lib/i18n";
@@ -21,10 +21,20 @@ type FloatingAgentProps = {
   logoSrc?: string;
 };
 
+const FAB_LOGO_WORDMARK = "/brand/logo-wordmark.svg";
+
+function resolveFabLogo(logoSrc: string) {
+  if (logoSrc.endsWith("/brand/logo.svg") || logoSrc === "/brand/logo.svg") {
+    return FAB_LOGO_WORDMARK;
+  }
+  return logoSrc;
+}
+
 export function FloatingAgent({ locale, logoSrc = "/brand/logo.svg" }: FloatingAgentProps) {
   const labels = getUiLabels(locale);
   const [open, setOpen] = useState(false);
   const siteConfig = getSiteConfig();
+  const fabLogo = resolveFabLogo(logoSrc);
 
   const socialLinks = useMemo(
     () =>
@@ -48,27 +58,19 @@ export function FloatingAgent({ locale, logoSrc = "/brand/logo.svg" }: FloatingA
         <AnimatePresence>
           {open ? (
             <motion.div
-              initial={{ opacity: 0, y: 8, scale: 0.94 }}
+              initial={{ opacity: 0, y: 10, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 6, scale: 0.96 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute bottom-full end-0 z-10 mb-3 w-56 origin-bottom-end overflow-hidden rounded-2xl border border-border/70 bg-paper shadow-[0_16px_48px_rgba(0,0,0,0.12)]"
+              exit={{ opacity: 0, y: 8, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute bottom-full end-0 z-10 mb-3 w-56 origin-bottom-end overflow-hidden rounded-2xl border border-border/80 bg-paper shadow-[0_20px_50px_rgba(10,10,10,0.16)]"
             >
-              <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/70">
+              <div className="border-b border-border/70 px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
                   {labels.socialFabTitle}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="grid size-8 place-items-center rounded-full text-ink/50 transition hover:bg-canvas hover:text-ink"
-                  aria-label={labels.close}
-                >
-                  <IconClose className="size-4" />
-                </button>
               </div>
 
-              <ul className="space-y-1 p-2">
+              <ul className="p-2">
                 {socialLinks.map((link) => (
                   <li key={link.label}>
                     <a
@@ -78,7 +80,7 @@ export function FloatingAgent({ locale, logoSrc = "/brand/logo.svg" }: FloatingA
                       onClick={() => setOpen(false)}
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink transition hover:bg-canvas"
                     >
-                      <span className="grid size-9 place-items-center rounded-full bg-canvas text-accent">
+                      <span className="grid size-9 place-items-center rounded-full bg-accent/10 text-accent">
                         <link.icon className="size-4" />
                       </span>
                       {link.label}
@@ -93,46 +95,52 @@ export function FloatingAgent({ locale, logoSrc = "/brand/logo.svg" }: FloatingA
         <motion.button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          whileTap={{ scale: 0.96 }}
+          whileTap={{ scale: 0.98 }}
           className={cn(
-            "rounded-full bg-white p-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-1 ring-border/60 transition",
-            open && "ring-accent/30",
+            "rounded-2xl bg-noir p-0.5 shadow-[0_12px_40px_rgba(10,10,10,0.28)] transition hover:shadow-[0_16px_48px_rgba(10,10,10,0.34)]",
+            open && "p-1",
           )}
           aria-expanded={open}
           aria-label={labels.socialFabToggle}
         >
-          <AnimatePresence mode="wait">
-            {open ? (
-              <motion.span
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="grid size-11 place-items-center"
-              >
-                <IconClose className="size-5 text-ink/70" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="logo"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="grid size-11 place-items-center rounded-full bg-canvas px-2"
-              >
-                <SiteImage
-                  brand
-                  src={logoSrc}
-                  alt={siteConfig.name}
-                  width={357}
-                  height={94}
-                  className="h-6 w-auto"
-                />
-              </motion.span>
+          <span
+            className={cn(
+              "flex items-center justify-center rounded-[14px] bg-white",
+              open ? "size-11" : "px-5 py-3",
             )}
-          </AnimatePresence>
+          >
+            <AnimatePresence mode="wait">
+              {open ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="grid place-items-center"
+                >
+                  <IconClose className="size-5 text-ink/70" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="logo"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <Image
+                    src={fabLogo}
+                    alt={siteConfig.name}
+                    width={111}
+                    height={38}
+                    unoptimized
+                    className="h-7 w-auto sm:h-8"
+                  />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </span>
         </motion.button>
       </div>
     </div>

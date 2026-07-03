@@ -17,7 +17,6 @@ export const seoMeta = defineType({
       name: "ogImage",
       type: "image",
       title: "Open Graph image",
-      options: { hotspot: true },
       fields: [
         defineField({ name: "alt", type: "string", title: "Alt text" }),
         defineField({ name: "caption", type: "string", title: "Caption" }),

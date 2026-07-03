@@ -11,11 +11,9 @@ export const legacyAssets = {
     faviconLocal: "/favicon.png",
   },
   caseStudies: {
-    makmleenSawa: "https://aevenda.com/wp-content/themes/Avenda/assets/images/DSC09227.jpg",
-    tawuniyaBooth:
-      "https://aevenda.com/wp-content/themes/Avenda/assets/images/WhatsApp Image 2025-10-09 at 7.28.02 PM.jpeg",
-    riyadhBankHilal:
-      "https://aevenda.com/wp-content/themes/Avenda/assets/images/WhatsApp Image 2025-08-31 at 01.39.59 (2).jpeg",
+    makmleenSawa: "/media/makmleen-sawa.jpg",
+    tawuniyaBooth: "/media/tawuniya-booth.jpeg",
+    riyadhBankHilal: "/media/riyadh-bank-hilal.jpeg",
   },
   /** Partner/client logos — see src/content/partners.ts for the full list */
   clientsDir: "/clients",

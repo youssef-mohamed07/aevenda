@@ -2,27 +2,29 @@ import Image from "next/image";
 import { resolveImageSrc } from "@/lib/placeholders";
 import { cn } from "@/lib/utils";
 
+/** Canvas-toned blur placeholder for instant visual feedback */
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k=";
+
 type SiteImageProps = {
   src: string;
   alt: string;
   width?: number;
   height?: number;
-  /** Dimensions used when `src` is missing or not in `public/`. */
   placeholderWidth?: number;
   placeholderHeight?: number;
-  /** Logos and flags — render real assets instead of placeholders. */
   brand?: boolean;
   className?: string;
   fill?: boolean;
   sizes?: string;
   priority?: boolean;
+  quality?: number;
 };
 
-/**
- * Image wrapper that uses next/image for local/optimizable assets and falls
- * back to a plain <img> for remote hosts. Missing local paths are swapped for
- * dimension-labelled placeholders automatically.
- */
+function isSvg(src: string) {
+  return src.endsWith(".svg") || src.includes(".svg?");
+}
+
 export function SiteImage({
   src,
   alt,
@@ -35,6 +37,7 @@ export function SiteImage({
   fill,
   sizes,
   priority,
+  quality = 80,
 }: SiteImageProps) {
   const fallbackW = placeholderWidth ?? width ?? 1200;
   const fallbackH = placeholderHeight ?? height ?? 800;
@@ -42,37 +45,25 @@ export function SiteImage({
 
   if (!resolvedSrc) return null;
 
-  const isRemote = /^https?:\/\//.test(resolvedSrc);
-
-  if (isRemote) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={resolvedSrc}
-        alt={alt}
-        width={fill ? undefined : width}
-        height={fill ? undefined : height}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        className={cn(
-          fill &&
-            "absolute inset-0 h-full w-full max-h-full max-w-full object-cover object-center",
-          className,
-        )}
-      />
-    );
-  }
+  const svg = isSvg(resolvedSrc);
+  const blur = !svg ? { placeholder: "blur" as const, blurDataURL: BLUR_DATA_URL } : {};
+  const imageQuality = svg ? undefined : quality;
 
   if (fill) {
     return (
-      <Image
-        src={resolvedSrc}
-        alt={alt}
-        fill
-        className={className}
-        sizes={sizes ?? "(max-width: 1200px) 100vw, 1200px"}
-        priority={priority}
-      />
+      <span className="absolute inset-0 overflow-hidden bg-canvas">
+        <Image
+          src={resolvedSrc}
+          alt={alt}
+          fill
+          className={cn("site-image-fade object-cover", className)}
+          sizes={sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
+          priority={priority}
+          {...(imageQuality !== undefined ? { quality: imageQuality } : {})}
+          unoptimized={svg}
+          {...blur}
+        />
+      </span>
     );
   }
 
@@ -82,9 +73,12 @@ export function SiteImage({
       alt={alt}
       width={width ?? fallbackW}
       height={height ?? fallbackH}
-      className={className}
-      sizes={sizes ?? "(max-width: 1200px) 100vw, 1200px"}
+      className={cn("site-image-fade bg-canvas", className)}
+      sizes={sizes ?? "(max-width: 768px) 100vw, 1200px"}
       priority={priority}
+      {...(imageQuality !== undefined ? { quality: imageQuality } : {})}
+      unoptimized={svg}
+      {...blur}
     />
   );
 }

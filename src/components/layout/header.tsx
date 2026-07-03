@@ -60,6 +60,7 @@ export function Header({
               alt={siteConfig.name}
               width={357}
               height={94}
+              priority
               className="h-6 w-auto md:h-8"
             />
           </Link>

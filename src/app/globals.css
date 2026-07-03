@@ -19,6 +19,10 @@
   --font-display: var(--font-display);
   --font-arabic: var(--font-arabic);
 
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0, 1);
 
@@ -120,15 +124,15 @@ html[dir="rtl"] main {
 
 .display {
   font-family: var(--font-display), Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   line-height: 1;
 }
 
 html.lang-ar .display,
 .lang-ar .display {
   font-family: var(--font-arabic), var(--font-sans), sans-serif;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
 }
@@ -297,7 +301,7 @@ html.lang-ar .display,
   position: relative;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.01em;
   color: color-mix(in srgb, var(--color-ink) 55%, transparent);
   transition: color 0.25s ease;
@@ -305,7 +309,7 @@ html.lang-ar .display,
 
 .lang-ar .site-header-link {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
@@ -369,6 +373,26 @@ html.lang-ar .display,
   height: 100dvh;
   height: 100svh;
   overflow: hidden;
+}
+
+.site-image-fade {
+  opacity: 1;
+  animation: site-image-in 0.45s var(--ease-out-expo) both;
+}
+
+@keyframes site-image-in {
+  from {
+    opacity: 0.88;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-image-fade {
+    animation: none;
+  }
 }
 
 .accent-dash {
