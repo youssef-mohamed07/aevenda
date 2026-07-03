@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
+import { SiteSplash } from "@/components/layout/site-splash";
 import { LocaleDocumentSync } from "@/components/i18n/locale-document-sync";
 import { FloatingAgent } from "@/components/layout/floating-agent";
 import { Footer } from "@/components/layout/footer";
@@ -63,6 +64,7 @@ export default async function LocaleLayout({
         }}
       />
       <LocaleDocumentSync locale={localeParam} />
+      <SiteSplash locale={localeParam} />
       <TopLoadingBar />
       <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
       <Header locale={localeParam} dictionary={layoutDictionary} logoSrc={logoSrc} />

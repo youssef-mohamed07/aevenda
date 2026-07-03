@@ -60,6 +60,7 @@ export function getUiLabels(locale: Locale) {
     agentToggle: locale === "ar" ? "فتح المساعد" : "Open assistant",
     socialFabToggle: locale === "ar" ? "فتح السوشيال" : "Open social links",
     socialFabTitle: locale === "ar" ? "تابعنا" : "Follow us",
+    splashSkip: locale === "ar" ? "تخطي" : "Skip",
     testimonialClient: locale === "ar" ? "عميل Aevenda" : "Aevenda client",
   };
 }

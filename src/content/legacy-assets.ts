@@ -15,6 +15,10 @@ export const legacyAssets = {
     tawuniyaBooth: "/media/tawuniya-booth.jpeg",
     riyadhBankHilal: "/media/riyadh-bank-hilal.jpeg",
   },
+  splash: {
+    landscape: "/media/splash-landscape.mp4",
+    vertical: "/media/splash-vertical.mp4",
+  },
   /** Partner/client logos — see src/content/partners.ts for the full list */
   clientsDir: "/clients",
 } as const;
